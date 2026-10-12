@@ -62,7 +62,8 @@ CI_LIGHT=1 python3 tests/run_all.py
 ```
 
 `tests/run_all.py` also runs the template gates for links, the publish
-boundary, STAC validity, and Portolan conformance through `rashid`. Each week,
+boundary, STAC validity, extension schemas, and Portolan conformance
+through `rashid`. Each week,
 the [live claims](.github/workflows/live-claims.yml) workflow repeats the
 claims gate against the published objects.
 

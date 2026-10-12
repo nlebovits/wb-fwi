@@ -18,6 +18,7 @@ TESTS = [
     "test_upload_data.py",
     "test_stac_valid.py",
     "test_conformance.py",
+    "test_extension_schemas.py",      # fetches the schemas over HTTPS
     "test_agent_claims.py",           # needs tools/build.py first
     "test_agent_claims_mutation.py",  # needs tools/build.py first
 ]

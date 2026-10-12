@@ -10,8 +10,9 @@ script draws the COG itself:
 
 1. Frame the collection bbox to the 3:2 card shape in Web Mercator.
 2. Draw the Esri World Light Gray basemap, the first basemap the skill tries.
-3. Draw the collection's first render over it, with that render's colormap
-   and nodata. The thumbnail shows what the browser shows.
+3. Draw the collection's first render over it, with the browser's ramp for
+   its colormap_name, its rescale, and its nodata. The thumbnail shows what
+   the browser shows.
 4. Fail when fewer than MIN_DATA_FRACTION of the pixels show data. This is
    the skill's blank probe. A person still looks at the image.
 
@@ -90,16 +91,31 @@ def basemap() -> np.ndarray:
     return np.asarray(world).transpose(2, 0, 1)
 
 
+# The ramps the Portolan browser draws for a render's colormap_name, as
+# [t, [r, g, b]] stops. Copied from src/utils/renders.js in portolan-browser,
+# so the thumbnail matches the map.
+RAMPS = {
+    "rdylgn": [
+        (0.0, (215, 25, 28)),
+        (0.7, (254, 195, 121)),
+        (0.8, (243, 250, 187)),
+        (0.9, (207, 236, 176)),
+        (1.0, (51, 160, 44)),
+    ],
+}
+
+
 def colorize(values: np.ndarray, render: dict) -> np.ndarray:
-    """RGBA from the render's interval colormap. Nodata and gaps stay clear."""
+    """RGBA from the render's named ramp and rescale. Nodata stays clear."""
+    stops = RAMPS[render["colormap_name"]]
+    low, high = render["rescale"][0]
+    t = np.nan_to_num(np.clip((values - low) / ((high - low) or 1), 0, 1))
+    positions = [stop for stop, _ in stops]
     rgba = np.zeros((4,) + values.shape, dtype=np.uint8)
-    intervals = sorted(render["colormap"], key=lambda entry: entry[0][0])
-    top = intervals[-1][0][1]
-    for (low, high), color in intervals:
-        inside = (values >= low) & ((values < high) | ((high == top) & (values == high)))
-        for channel in range(3):
-            rgba[channel][inside] = color[channel]
-        rgba[3][inside] = color[3] if len(color) == 4 else 255
+    for channel in range(3):
+        ramp = [color[channel] for _, color in stops]
+        rgba[channel] = np.round(np.interp(t, positions, ramp)).astype(np.uint8)
+    rgba[3] = np.where(np.isfinite(values), 255, 0)
     nodata = render.get("nodata")
     for value in nodata if isinstance(nodata, list) else [nodata]:
         if value is not None:
