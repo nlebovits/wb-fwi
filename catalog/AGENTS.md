@@ -77,7 +77,9 @@ The files and the resource descriptions say 2, 10, and 30 years.
 
 **The grid edge confuses some map clients.** The grid starts at longitude
 -180.3125, west of the antimeridian. The Portolan data browser draws the COGs
-shifted and stretched. The bytes are correct. Read them with GDAL or rasterio
+shifted and stretched, as the
+[browser issue](https://github.com/portolan-sdi/portolan-browser/issues/78)
+records. The bytes are correct. Read them with GDAL or rasterio
 for analysis. <!-- check: grid_west_edge -->
 
 ## Hazard thresholds
