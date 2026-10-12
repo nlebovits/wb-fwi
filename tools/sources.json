@@ -1,0 +1,38 @@
+{
+  "dataset_page": "https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard",
+  "files": [
+    {
+      "name": "csiro_wf_max_fwi_rp2.tif",
+      "return_period": 2,
+      "resource_id": "DR0095654",
+      "url": "https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095654/csiro_wf_max_fwi_rp2.tif",
+      "size": 241376,
+      "sha256": "82c3930b15cb4b313fe96abb19e44f620c271628dbd242102950e12fcab089a7"
+    },
+    {
+      "name": "csiro_wf_max_fwi_rp10.tif",
+      "return_period": 10,
+      "resource_id": "DR0095655",
+      "url": "https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095655/csiro_wf_max_fwi_rp10.tif",
+      "size": 240294,
+      "sha256": "79fc7a15f30b19ecaf5b20082fef1d5af9c3690b5e776bf9e81383955864bbab"
+    },
+    {
+      "name": "csiro_wf_max_fwi_rp30.tif",
+      "return_period": 30,
+      "resource_id": "DR0095656",
+      "url": "https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095656/csiro_wf_max_fwi_rp30.tif",
+      "size": 240181,
+      "sha256": "a61a1620c6106c10abe0cdf36156068deed48c978714536c079bc1c671b0e591"
+    }
+  ],
+  "documents": [
+    {
+      "name": "THhazardclass_Wildfire_CSIRO.pdf",
+      "resource_id": "DR0095597",
+      "url": "https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095597/THhazardclass_Wildfire_CSIRO.pdf",
+      "size": 1683218,
+      "sha256": "102f1079bb7aff6666ffd6bea36d9ebf7258bcd09c092cfe6cd19032fef2fccd"
+    }
+  ]
+}

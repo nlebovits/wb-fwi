@@ -1,32 +1,54 @@
-# Example Catalog
+# World Bank global wildfire hazard
 
-TODO(setup): replace this file. It is the front door to the published catalog,
-the page people land on at the public base URL. It is not the same document as
-the README in the repository root, which is never published.
+<!-- vale Google.Exclamation = NO -->
+
+A Portolan mirror of the World Bank's
+[global wildfire hazard](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard)
+dataset, published as cloud-optimized GeoTIFFs.
 
 ## What is here
 
-TODO(setup): the datasets, in one paragraph. Say what each collection covers,
-the area and the time range, and what a reader can do with it.
+The catalog has one collection per return period. Each collection stores the yearly maximum Fire Weather
+Index (FWI) expected once in that period, on a global 0.5° grid.
+[CSIRO](https://www.csiro.au/) computed the grids for the
+[ThinkHazard!](https://thinkhazard.org/) wildfire layer, from daily FWI in
+NASA's [Global Fire Weather Database](https://data.giss.nasa.gov/impacts/gfwed/)
+for 1981 to 2016.
+
+- [FWI, 2-year return period](fwi-rp2/README.md)
+- [FWI, 10-year return period](fwi-rp10/README.md)
+- [FWI, 30-year return period](fwi-rp30/README.md)
 
 ## License
 
-TODO(setup): the SPDX identifier, or `other` with a link to the terms. Say who
-holds the rights and what a reuser has to attribute.
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), as the World Bank
+Data Catalog lists it. Attribute the World Bank and CSIRO when you reuse the
+data.
 
 ## Provenance
 
-TODO(setup): where the data came from. Say whether this catalog is the official
-publication from the producing organization, or a mirror of someone else's data.
-If it is a mirror, link the upstream and say how often it syncs.
+This catalog is a mirror, not the official publication. The World Bank
+publishes the original GeoTIFFs and the technical basis PDF. The World Bank
+lists the dataset as "No further updates planned". The mirror converts each
+GeoTIFF to a COG with embedded statistics and leaves every pixel value
+unchanged. The build is in
+[nlebovits/wb-fwi](https://github.com/nlebovits/wb-fwi). It pins each source
+file by SHA-256, so a changed upstream file stops the build.
 
 ## Access
 
-TODO(setup): one query someone can run without downloading anything, against a
-real published file. Run it before you paste it.
+Read the 2-year return level at one point with
+[rasterio](https://rasterio.readthedocs.io/):
 
-```sql
--- Example shape. Replace the URL and the columns with your own.
-INSTALL spatial; LOAD spatial; INSTALL httpfs; LOAD httpfs;
-SELECT count(*) FROM 'https://example.invalid/prefix/collection/data.parquet';
+```python
+import rasterio
+
+URL = ("https://data.source.coop/portolan-mirrors/wb-fwi"
+       "/fwi-rp2/csiro_wf_max_fwi_rp2.tif")
+with rasterio.open(URL) as src:
+    print(next(src.sample([(150.3, -33.7)]))[0])
 ```
+
+Read the [agent guide](AGENTS.md) before you query. It lists the quirks that
+produce wrong answers. One example: 0 marks masked oceans and deserts as well
+as cells with no fire weather.

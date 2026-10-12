@@ -4,14 +4,15 @@
   "stac_extensions": [
     "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
   ],
-  "id": "example-catalog",
-  "title": "Example Catalog",
-  "description": "TODO(setup): one or two sentences saying what this catalog holds, who produced the data, and who it is for. A person and an agent both read this first.",
+  "id": "wb-fwi",
+  "title": "World Bank global wildfire hazard",
+  "description": "A mirror of the World Bank's global wildfire hazard dataset. CSIRO computed it for [ThinkHazard!](https://thinkhazard.org/) from NASA's Global Fire Weather Database. Three collections hold Fire Weather Index return levels for 2, 10, and 30-year return periods on a global 0.5° grid, as cloud-optimized GeoTIFFs. Read [AGENTS.md](AGENTS.md) before you query.",
   "links": [
     {
       "rel": "root",
       "href": "./catalog.json",
-      "type": "application/json"
+      "type": "application/json",
+      "title": "World Bank global wildfire hazard"
     },
     {
       "rel": "describedby",
@@ -26,14 +27,39 @@
       "title": "Catalog agent guide"
     },
     {
+      "rel": "self",
+      "href": "https://data.source.coop/portolan-mirrors/wb-fwi/catalog.json",
+      "type": "application/json",
+      "title": "World Bank global wildfire hazard"
+    },
+    {
+      "rel": "child",
+      "href": "./fwi-rp2/collection.json",
+      "type": "application/json",
+      "title": "Wildfire hazard: FWI, 2-year return period"
+    },
+    {
+      "rel": "child",
+      "href": "./fwi-rp10/collection.json",
+      "type": "application/json",
+      "title": "Wildfire hazard: FWI, 10-year return period"
+    },
+    {
+      "rel": "child",
+      "href": "./fwi-rp30/collection.json",
+      "type": "application/json",
+      "title": "Wildfire hazard: FWI, 30-year return period"
+    },
+    {
       "rel": "vcs",
-      "href": "https://github.com/TODO(setup)",
+      "href": "https://github.com/nlebovits/wb-fwi",
       "title": "Source repository"
     },
     {
       "rel": "issues",
-      "href": "https://github.com/TODO(setup)/issues",
+      "href": "https://github.com/nlebovits/wb-fwi/issues",
       "title": "Issue tracker"
     }
-  ]
+  ],
+  "updated": "2026-10-12T00:00:00Z"
 }

@@ -1,0 +1,260 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json",
+    "https://stac-extensions.github.io/file/v2.1.0/schema.json",
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/raster/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/render/v2.0.0/schema.json"
+  ],
+  "id": "fwi-rp10",
+  "title": "Wildfire hazard: FWI, 10-year return period",
+  "description": "The yearly maximum Fire Weather Index (FWI) at noon local time, expected once in 10 years, on a global 0.5° grid. Higher values mean weather that favors severe fire.\n\n[CSIRO](https://www.csiro.au/) computed the grid for the [ThinkHazard!](https://thinkhazard.org/) wildfire layer from the daily FWI in NASA's [Global Fire Weather Database](https://data.giss.nasa.gov/impacts/gfwed/), 1981 to 2016. The [technical basis](https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095597/THhazardclass_Wildfire_CSIRO.pdf) gives the method and the thresholds that ThinkHazard! uses. Sibling collections hold the 2 and 30-year return periods.\n\nThis collection mirrors the [World Bank Data Catalog dataset](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard) as a cloud-optimized GeoTIFF. Cells that GFWED masks, such as oceans and deserts, hold 0. Read [AGENTS.md](AGENTS.md) for the grid, the quirks, and recipes that run.",
+  "keywords": [
+    "fire hazard",
+    "wildfire",
+    "fire weather index",
+    "return period",
+    "ThinkHazard!",
+    "disaster risk management"
+  ],
+  "license": "CC-BY-4.0",
+  "providers": [
+    {
+      "name": "CSIRO",
+      "roles": [
+        "producer",
+        "processor"
+      ],
+      "url": "https://www.csiro.au/"
+    },
+    {
+      "name": "World Bank, Global Facility for Disaster Reduction and Recovery (GFDRR)",
+      "roles": [
+        "licensor"
+      ],
+      "url": "https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard"
+    },
+    {
+      "name": "Portolan Mirrors",
+      "roles": [
+        "host"
+      ],
+      "url": "https://source.coop/portolan-mirrors/wb-fwi"
+    }
+  ],
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -180.0,
+          -58.25,
+          180.0,
+          75.25
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "1981-01-01T00:00:00Z",
+          "2016-12-31T23:59:59Z"
+        ]
+      ]
+    }
+  },
+  "updated": "2026-10-12T00:00:00Z",
+  "renders": {
+    "fwi": {
+      "title": "FWI, 10-year return period",
+      "assets": [
+        "data"
+      ],
+      "nodata": 0,
+      "colormap": [
+        [
+          [
+            0,
+            15
+          ],
+          [
+            255,
+            255,
+            178
+          ]
+        ],
+        [
+          [
+            15,
+            20
+          ],
+          [
+            254,
+            204,
+            92
+          ]
+        ],
+        [
+          [
+            20,
+            30
+          ],
+          [
+            253,
+            141,
+            60
+          ]
+        ],
+        [
+          [
+            30,
+            50
+          ],
+          [
+            240,
+            59,
+            32
+          ]
+        ],
+        [
+          [
+            50,
+            300
+          ],
+          [
+            189,
+            0,
+            38
+          ]
+        ]
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../catalog.json",
+      "type": "application/json",
+      "title": "World Bank global wildfire hazard"
+    },
+    {
+      "rel": "parent",
+      "href": "../catalog.json",
+      "type": "application/json",
+      "title": "World Bank global wildfire hazard"
+    },
+    {
+      "rel": "self",
+      "href": "https://data.source.coop/portolan-mirrors/wb-fwi/fwi-rp10/collection.json",
+      "type": "application/json",
+      "title": "Wildfire hazard: FWI, 10-year return period"
+    },
+    {
+      "rel": "via",
+      "href": "https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard",
+      "type": "text/html",
+      "title": "Global wildfire hazard, World Bank Data Catalog"
+    },
+    {
+      "rel": "license",
+      "href": "https://creativecommons.org/licenses/by/4.0/",
+      "type": "text/html",
+      "title": "CC BY 4.0"
+    },
+    {
+      "rel": "describedby",
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Collection README"
+    },
+    {
+      "rel": "agents",
+      "href": "./AGENTS.md",
+      "type": "text/markdown",
+      "title": "Collection agent guide"
+    },
+    {
+      "rel": "related",
+      "href": "../fwi-rp2/collection.json",
+      "type": "application/json",
+      "title": "Wildfire hazard: FWI, 2-year return period"
+    },
+    {
+      "rel": "related",
+      "href": "../fwi-rp30/collection.json",
+      "type": "application/json",
+      "title": "Wildfire hazard: FWI, 30-year return period"
+    }
+  ],
+  "assets": {
+    "data": {
+      "href": "./csiro_wf_max_fwi_rp10.tif",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "title": "FWI, 10-year return period (COG)",
+      "description": "Yearly maximum Fire Weather Index at noon local time, expected once in 10 years. Cloud-optimized copy of the World Bank file.",
+      "roles": [
+        "data"
+      ],
+      "file:size": 236619,
+      "file:checksum": "12204ae750ab5870789e70a6478477087042eb46754c338e1d5692dc4d33009e48c8",
+      "proj:code": "EPSG:4326",
+      "proj:shape": [
+        267,
+        720
+      ],
+      "proj:transform": [
+        0.5,
+        0.0,
+        -180.3125,
+        0.0,
+        -0.5,
+        75.25
+      ],
+      "bands": [
+        {
+          "data_type": "float32",
+          "nodata": -3.4028230607370965e+38,
+          "statistics": {
+            "minimum": 0.0,
+            "maximum": 300.0,
+            "mean": 18.643132,
+            "stddev": 41.791553,
+            "valid_percent": 100.0
+          },
+          "raster:spatial_resolution": 0.5
+        }
+      ]
+    },
+    "source": {
+      "href": "https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095655/csiro_wf_max_fwi_rp10.tif",
+      "type": "image/tiff; application=geotiff",
+      "title": "World Bank original, 10-year return period (DR0095655)",
+      "roles": [
+        "source"
+      ],
+      "file:size": 240294,
+      "file:checksum": "122079fc7a15f30b19ecaf5b20082fef1d5af9c3690b5e776bf9e81383955864bbab"
+    },
+    "thumbnail": {
+      "href": "./thumbnail.png",
+      "type": "image/png",
+      "title": "FWI, 10-year return period",
+      "roles": [
+        "thumbnail"
+      ],
+      "file:size": 108551,
+      "file:checksum": "1220f7eec83f4694cc4c25167f89a5e43e65bb66bc15101627e92eb0cfbe820861a3"
+    },
+    "technical_basis": {
+      "href": "https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095597/THhazardclass_Wildfire_CSIRO.pdf",
+      "type": "application/pdf",
+      "title": "Wildfire hazard layer technical basis and demonstration (CSIRO, 2017)",
+      "roles": [
+        "metadata"
+      ],
+      "file:size": 1683218,
+      "file:checksum": "1220102f1079bb7aff6666ffd6bea36d9ebf7258bcd09c092cfe6cd19032fef2fccd"
+    }
+  }
+}

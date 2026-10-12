@@ -1,92 +1,89 @@
-# Portolan Catalog Template
+# World Bank global wildfire hazard, as a Portolan catalog
 
-A starting point for a [Portolan](https://www.portolan-sdi.org/) catalog whose
-metadata lives in git. Click **Use this template**, work through
-[SETUP.md](SETUP.md), and you have a repository whose CI validates every change
-before it publishes.
+<!-- vale Google.Exclamation = NO -->
+<!-- vale Microsoft.Negative = NO -->
 
-**`catalog/` is the published catalog.** Everything in it is published.
-Everything outside it never is. That boundary is the whole publish contract,
-and `tools/publish.py` has no flag or config key that widens it.
+This repository builds and maintains a [Portolan](https://www.portolan-sdi.org/)
+mirror of the World Bank's
+[global wildfire hazard](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard)
+dataset. CSIRO computed the data for the ThinkHazard! wildfire layer. Each
+grid gives the yearly maximum Fire Weather Index at noon local time that is
+expected once in 2, 10, or 30 years, on a global 0.5° grid.
 
-## Three kinds of file
+The published catalog is at
+[source.coop/portolan-mirrors/wb-fwi](https://source.coop/portolan-mirrors/wb-fwi).
+Open it in the
+[data browser](https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/wb-fwi/catalog.json),
+or read a COG directly with GDAL or rasterio:
 
-| Kind | Where | Example |
-|---|---|---|
-| Tracked and published | inside `catalog/` | STAC JSON, `README.md`, `AGENTS.md`, thumbnails, logos |
-| Tracked, never published | outside `catalog/` | `tools/`, `tests/`, `docs/`, this README, `catalog.publish.yaml` |
-| Neither | gitignored | GeoParquet, COGs, PMTiles, credentials |
+```python
+import rasterio
 
-The data lives in object storage next to the published metadata. The
-repository references it by URL and never stores it.
-
-## Layout
-
-| Path | What it is |
-|---|---|
-| `catalog/` | The published tree, synced 1:1 to object storage |
-| `catalog.publish.yaml` | Where it publishes, and under what public URL |
-| `tools/publish.py` | The sync. Dry run by default |
-| `tools/upload_data.py` | The data upload. Dry run by default |
-| `tests/` | The gates CI runs on every pull request |
-| `docs/conformance.md` | Any validator finding this catalog accepts, and why |
-| `SETUP.md` | The checklist. Delete it when you are done |
-
-## Publish
-
-```bash
-python3 tools/publish.py            # dry run: what would change
-python3 tools/publish.py --confirm  # upload; needs AWS credentials
+URL = ("https://data.source.coop/portolan-mirrors/wb-fwi"
+       "/fwi-rp2/csiro_wf_max_fwi_rp2.tif")
+with rasterio.open(URL) as src:
+    print(next(src.sample([(150.3, -33.7)]))[0])
 ```
 
-It never deletes. Removing a file from `catalog/` does not unpublish it, so
-delete the object yourself if that is what you meant.
+Read the [catalog agent guide](catalog/AGENTS.md) before you analyze the data.
+A value of 0 marks oceans and deserts that the source masks, as well as land
+with no fire weather. The grid's west edge sits at -180.3125, and the data
+browser draws it out of place until
+[portolan-browser#78](https://github.com/portolan-sdi/portolan-browser/issues/78)
+is fixed.
 
-## Upload the data
+## Build
 
-The data is too large for git, so it lives outside `catalog/`.
-`tools/upload_data.py` carries it to the same bucket prefix. Set `data_dir` in
-`catalog.publish.yaml` to the directory that holds it.
-
-```bash
-python3 tools/upload_data.py            # dry run: what would change
-python3 tools/upload_data.py --confirm  # upload; needs AWS credentials
-```
-
-Both scripts share one set of rules. `upload_data.py` imports the sentinel
-guard, the content types, the change detection, and the upload pool from
-`publish.py`. It changes one thing, the directory it walks. Only the suffixes
-in its allow-list upload, so staged scratch files stay out of the bucket.
-
-## Test
+Data never enters git. `tools/build.py` downloads the World Bank GeoTIFFs,
+which `tools/sources.json` pins by SHA-256, and converts each one to a COG in
+`staging/`. The script then writes sizes, checksums, band statistics, and
+extents into the STAC JSON under `catalog/`. The other STAC fields and the
+documentation are hand-written.
 
 ```bash
-python3 tests/run_all.py
+python -m pip install -r requirements-ci.txt
+python3 tools/build.py
 ```
 
-| Gate | What it checks |
-|---|---|
-| `test_setup.py` | Template placeholders are all edited, or all untouched |
-| `test_links.py` | Every relative link and asset href resolves |
-| `test_publish.py` | Nothing outside `catalog/` can be uploaded |
-| `test_upload_data.py` | Only staged files with an allowed suffix upload |
-| `test_stac_valid.py` | Valid STAC 1.1.0, via `stac-check` |
-| `test_conformance.py` | Portolan conformance, via `rashid` |
+When a collection's render changes, run `tools/thumbnail.py` first and look
+at the new images before you commit them.
 
-The two validator gates skip when their tools are absent, so a clean checkout
-runs with no setup. CI installs both and enforces them.
+## Documentation tests
 
-## What this template does not decide
+Each claim in a published `AGENTS.md` sits beside an HTML comment that names
+its test. A check measures the COGs, and a quote must match the technical
+basis PDF or the World Bank page word for word. Because every number in the
+guides must come from one of those tests, an edited number fails CI. The
+mutation test proves this by changing each number, one at a time.
 
-How a published catalog points back at the repository that maintains it. Three
-encodings are in use across real catalogs and none is standardized, so this
-template ships none of them rather than freezing one in by default. The
-tradeoffs are in
-[portolan-spec#145](https://github.com/portolan-sdi/portolan-spec/issues/145)
-and in the
-[git-backed catalogs guidance](https://github.com/portolan-sdi/portolan-spec/blob/main/specs/best-practices/git-backed-catalogs.md).
+```bash
+python3 tools/build.py --check
+CI_LIGHT=1 python3 tests/run_all.py
+```
+
+`tests/run_all.py` also runs the template gates for links, the publish
+boundary, STAC validity, and Portolan conformance through `rashid`. Each week,
+the [live claims](.github/workflows/live-claims.yml) workflow repeats the
+claims gate against the published objects.
+
+## Publishing
+
+`catalog.publish.yaml` sends the catalog to the `portolan-mirrors` account on
+Source Cooperative through the `source-coop-proxy` AWS profile. That profile
+reads temporary credentials from the
+[source-coop CLI](https://github.com/source-cooperative/source-coop-cli).
+
+```bash
+source-coop login
+python3 tools/upload_data.py --confirm
+python3 tools/publish.py --confirm
+```
+
+Without `--confirm`, both scripts print what they would upload. Neither
+script deletes an object.
 
 ## License
 
-Apache-2.0, covering the tooling in this repository. The data you catalog
-carries its own license, which belongs in `catalog/README.md`.
+Apache-2.0 covers the code in this repository. The data is
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Attribute the World
+Bank and CSIRO when you reuse it.
