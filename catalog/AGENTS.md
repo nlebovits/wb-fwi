@@ -103,8 +103,9 @@ ThinkHazard! reports a class per administrative unit. This catalog holds the
 grids, not the per-unit classes.
 <!-- quote: pdf | 8 | the scale of administrative units used in ThinkHazard! -->
 
-The browser colors use the same thresholds, plus 50, the top of the color
-scale in Figure 4 of the technical basis. <!-- check: render_breaks -->
+The browser colors run from green at FWI 0 to red at FWI 50 and above, the
+color scale of Figure 4 in the technical basis. The colors show the FWI value,
+not the hazard classes. <!-- check: render_ramp -->
 <!-- quote: pdf | 13 | Figure 4: Modelled yearly maximum 12 noon FWI for return period intervals of 2, 10 and 30 years. FWI is colour coded from green (FWI = 0) to red (FWI = 50). -->
 
 ## Recipes

@@ -292,16 +292,17 @@ def check_non_monotonic(rp: int | None) -> list[str]:
     return out
 
 
-def check_render_breaks(rp: int | None) -> list[str]:
-    breaks = set()
+def check_render_ramp(rp: int | None) -> list[str]:
     for p in RETURN_PERIODS:
-        for render in collection(p)["renders"].values():
-            assert render["nodata"] == 0, "a render draws the masked cells"
-            assert render["assets"] == ["data"], render["assets"]
-            breaks |= {e for (low, high), _ in render["colormap"] for e in (low, high)}
-    top = max(float(grid(p).max()) for p in RETURN_PERIODS)
-    assert breaks == {0, 15, 20, 30, 50, top}, f"unexpected breaks {sorted(breaks)}"
-    return ["plus 50"]
+        renders = list(collection(p)["renders"].values())
+        assert len(renders) == 1, f"{collection_id(p)} has {len(renders)} renders"
+        render = renders[0]
+        assert render["assets"] == ["data"], render["assets"]
+        assert render["nodata"] == 0, "the render draws the masked cells"
+        assert render["colormap_name"] == "rdylgn", render["colormap_name"]
+        assert "colormap" not in render, "the render also sets a colormap"
+        low, high = render["rescale"][0]
+    return [f"green at FWI {fmt(high)} to red at FWI {fmt(low)}"]
 
 
 def check_self_links(rp: int | None) -> list[str]:

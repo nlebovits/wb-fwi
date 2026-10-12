@@ -72,61 +72,11 @@
         "data"
       ],
       "nodata": 0,
-      "colormap": [
+      "colormap_name": "rdylgn",
+      "rescale": [
         [
-          [
-            0,
-            15
-          ],
-          [
-            255,
-            255,
-            178
-          ]
-        ],
-        [
-          [
-            15,
-            20
-          ],
-          [
-            254,
-            204,
-            92
-          ]
-        ],
-        [
-          [
-            20,
-            30
-          ],
-          [
-            253,
-            141,
-            60
-          ]
-        ],
-        [
-          [
-            30,
-            50
-          ],
-          [
-            240,
-            59,
-            32
-          ]
-        ],
-        [
-          [
-            50,
-            300
-          ],
-          [
-            189,
-            0,
-            38
-          ]
+          50,
+          0
         ]
       ]
     }
@@ -243,8 +193,8 @@
       "roles": [
         "thumbnail"
       ],
-      "file:size": 108178,
-      "file:checksum": "1220d3a33951ad7b649d143334c07d22973ddd0ff24fad19e668aa87840428f0828b"
+      "file:size": 160432,
+      "file:checksum": "1220bcbaa952b14ec675a48da842816c3e1484d67e88c10420765e76b53e70d6d285"
     },
     "technical_basis": {
       "href": "https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095597/THhazardclass_Wildfire_CSIRO.pdf",
