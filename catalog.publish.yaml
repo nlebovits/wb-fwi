@@ -2,23 +2,28 @@
 #
 # Everything under publish_dir is synced 1:1 to write_prefix. Data files are
 # never placed under publish_dir, so they cannot be published by accident.
+# The COGs live under data_dir and tools/upload_data.py uploads them.
 #
-# TODO(setup): replace the three sentinel values below. tools/publish.py
-# refuses to upload while any of them is unchanged.
+# The profile reads temporary credentials from the source-coop CLI through
+# the data.source.coop proxy:
+#
+#   [profile source-coop-proxy]
+#   credential_process = source-coop creds
+#   endpoint_url = https://data.source.coop
 
 # The S3 URI uploads are written to. Copy it from your storage provider.
-write_prefix: s3://EXAMPLE-BUCKET/EXAMPLE-PREFIX
+write_prefix: s3://portolan-mirrors/wb-fwi
 
 # The public base URL that serves write_prefix. Every href in the catalog is
 # built from this, so it goes in the STAC JSON and write_prefix does not.
-public_base: https://example.invalid/EXAMPLE-PREFIX
+public_base: https://data.source.coop/portolan-mirrors/wb-fwi
 
 region: us-west-2
 
 # The named AWS profile the publisher uses. Optional. Leave it commented out
 # to use the default boto3 session. Source Cooperative issues per-account
 # credentials, so set the profile name you stored them under.
-# profile: my-source-coop-profile
+profile: source-coop-proxy
 
 # The directory that IS the published catalog, synced 1:1 to write_prefix.
 # Nothing outside it is ever uploaded.
@@ -31,3 +36,6 @@ publish_dir: catalog
 # repository or ignored by it. Only the suffixes in PUBLISHABLE_SUFFIXES
 # upload. See the allow-list in tools/upload_data.py.
 # data_dir: ../catalog-staging
+
+# The COGs that tools/build.py writes. tools/upload_data.py uploads them.
+data_dir: staging

@@ -1,0 +1,15 @@
+# The packages tools/build.py, tools/thumbnail.py, and the gates need.
+#
+# The build pins exact versions. A new GDAL writes different bytes
+# for the same pixels, and the live claims gate compares checksums with the
+# published objects. Move a pin, rebuild, and republish in one change.
+rasterio==1.5.2
+numpy==2.5.4
+pypdf==6.20.0
+pillow==12.3.0
+boto3
+
+# The validators keep the template's policy. rashid takes a floor, and
+# stac-check stays unpinned. See docs/conformance.md.
+rashid>=0.1.5,<0.2.0
+stac-check
