@@ -1,11 +1,13 @@
-# Wildfire Hazard: FWI, 10-Year Return Period
+# Wildfire hazard: FWI, 10-year return period
 
-The yearly maximum 12 noon Fire Weather Index (FWI) expected once in 10 years,
+<!-- vale Google.Exclamation = NO -->
+
+The yearly maximum Fire Weather Index (FWI) at noon local time, expected once in 10 years,
 on a global 0.5° grid. Higher values mean weather that favors severe fire.
 
 ![FWI, 10-year return period](thumbnail.png)
 
-## What the data shows
+## Method
 
 [CSIRO](https://www.csiro.au/) fit a GEV distribution to the yearly maxima of
 daily FWI in NASA's

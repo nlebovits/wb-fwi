@@ -1,4 +1,6 @@
-# World Bank Global Wildfire Hazard
+# World Bank global wildfire hazard
+
+<!-- vale Google.Exclamation = NO -->
 
 A Portolan mirror of the World Bank's
 [global wildfire hazard](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard)
@@ -6,14 +8,16 @@ dataset, published as cloud-optimized GeoTIFFs.
 
 ## What is here
 
-Three collections, one per return period:
-[2 years](fwi-rp2/README.md), [10 years](fwi-rp10/README.md), and
-[30 years](fwi-rp30/README.md). Each holds the yearly maximum Fire Weather
+The catalog has one collection per return period. Each collection stores the yearly maximum Fire Weather
 Index (FWI) expected once in that period, on a global 0.5° grid.
 [CSIRO](https://www.csiro.au/) computed the grids for the
 [ThinkHazard!](https://thinkhazard.org/) wildfire layer, from daily FWI in
 NASA's [Global Fire Weather Database](https://data.giss.nasa.gov/impacts/gfwed/)
 for 1981 to 2016.
+
+- [FWI, 2-year return period](fwi-rp2/README.md)
+- [FWI, 10-year return period](fwi-rp10/README.md)
+- [FWI, 30-year return period](fwi-rp30/README.md)
 
 ## License
 

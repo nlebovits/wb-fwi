@@ -5,14 +5,14 @@
     "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
   ],
   "id": "wb-fwi",
-  "title": "World Bank Global Wildfire Hazard",
+  "title": "World Bank global wildfire hazard",
   "description": "A mirror of the World Bank's global wildfire hazard dataset. CSIRO computed it for [ThinkHazard!](https://thinkhazard.org/) from NASA's Global Fire Weather Database. Three collections hold Fire Weather Index return levels for 2, 10, and 30-year return periods on a global 0.5° grid, as cloud-optimized GeoTIFFs. Read [AGENTS.md](AGENTS.md) before you query.",
   "links": [
     {
       "rel": "root",
       "href": "./catalog.json",
       "type": "application/json",
-      "title": "World Bank Global Wildfire Hazard"
+      "title": "World Bank global wildfire hazard"
     },
     {
       "rel": "describedby",
@@ -30,25 +30,25 @@
       "rel": "self",
       "href": "https://data.source.coop/portolan-mirrors/wb-fwi/catalog.json",
       "type": "application/json",
-      "title": "World Bank Global Wildfire Hazard"
+      "title": "World Bank global wildfire hazard"
     },
     {
       "rel": "child",
       "href": "./fwi-rp2/collection.json",
       "type": "application/json",
-      "title": "Wildfire Hazard: FWI, 2-Year Return Period"
+      "title": "Wildfire hazard: FWI, 2-year return period"
     },
     {
       "rel": "child",
       "href": "./fwi-rp10/collection.json",
       "type": "application/json",
-      "title": "Wildfire Hazard: FWI, 10-Year Return Period"
+      "title": "Wildfire hazard: FWI, 10-year return period"
     },
     {
       "rel": "child",
       "href": "./fwi-rp30/collection.json",
       "type": "application/json",
-      "title": "Wildfire Hazard: FWI, 30-Year Return Period"
+      "title": "Wildfire hazard: FWI, 30-year return period"
     },
     {
       "rel": "vcs",

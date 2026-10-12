@@ -1,62 +1,76 @@
-# wb-fwi
+# World Bank global wildfire hazard, as a Portolan catalog
 
-A git-backed [Portolan](https://www.portolan-sdi.org/) mirror of the World
-Bank [global wildfire hazard](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard)
-dataset. It holds Fire Weather Index return levels for 2, 10, and 30 years on
-a global 0.5° grid, as cloud-optimized GeoTIFFs.
+<!-- vale Google.Exclamation = NO -->
+<!-- vale Microsoft.Negative = NO -->
 
-- Catalog: [source.coop/portolan-mirrors/wb-fwi](https://source.coop/portolan-mirrors/wb-fwi)
-- Data browser: [browser.portolan-sdi.org](https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/wb-fwi/catalog.json)
-- Proposal: [portolan-data#63](https://github.com/portolan-sdi/portolan-data/issues/63)
+This repository builds and maintains a [Portolan](https://www.portolan-sdi.org/)
+mirror of the World Bank's
+[global wildfire hazard](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard)
+dataset. CSIRO computed the data for the ThinkHazard! wildfire layer. Each
+grid gives the yearly maximum Fire Weather Index at noon local time that is
+expected once in 2, 10, or 30 years, on a global 0.5° grid.
 
-**`catalog/` is the published catalog.** Everything in it is published, and
-nothing outside it ever is. The COGs are built into `staging/` and never
-enter git. Each return period is one collection with one collection-level
-COG.
+The published catalog is at
+[source.coop/portolan-mirrors/wb-fwi](https://source.coop/portolan-mirrors/wb-fwi).
+Open it in the
+[data browser](https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/wb-fwi/catalog.json),
+or read a COG directly with GDAL or rasterio:
+
+```python
+import rasterio
+
+URL = ("https://data.source.coop/portolan-mirrors/wb-fwi"
+       "/fwi-rp2/csiro_wf_max_fwi_rp2.tif")
+with rasterio.open(URL) as src:
+    print(next(src.sample([(150.3, -33.7)]))[0])
+```
+
+Read the [catalog agent guide](catalog/AGENTS.md) before you analyze the data.
+A value of 0 marks oceans and deserts that the source masks, as well as land
+with no fire weather. The grid's west edge sits at -180.3125, and the data
+browser draws it out of place until
+[portolan-browser#78](https://github.com/portolan-sdi/portolan-browser/issues/78)
+is fixed.
 
 ## Build
+
+Data never enters git. `tools/build.py` downloads the World Bank GeoTIFFs,
+which `tools/sources.json` pins by SHA-256, and converts each one to a COG in
+`staging/`. The script then writes sizes, checksums, band statistics, and
+extents into the STAC JSON under `catalog/`. The other STAC fields and the
+documentation are hand-written.
 
 ```bash
 python -m pip install -r requirements-ci.txt
 python3 tools/build.py
 ```
 
-`tools/build.py` downloads the three GeoTIFFs, checks each against the SHA-256
-in `tools/sources.json`, and writes COGs with embedded statistics to
-`staging/`. It then writes the measured STAC fields: sizes, checksums, bands,
-projection, and extent. Every other STAC field is written by hand.
+When a collection's render changes, run `tools/thumbnail.py` first and look
+at the new images before you commit them.
 
-`tools/thumbnail.py` renders each `catalog/<collection>/thumbnail.png` from
-that collection's render. Run it before the build when a render changes, and
-look at the images before you commit them.
+## Documentation tests
 
-## Test
+Each claim in a published `AGENTS.md` sits beside an HTML comment that names
+its test. A check measures the COGs, and a quote must match the technical
+basis PDF or the World Bank page word for word. Because every number in the
+guides must come from one of those tests, an edited number fails CI. The
+mutation test proves this by changing each number, one at a time.
 
 ```bash
 python3 tools/build.py --check
 CI_LIGHT=1 python3 tests/run_all.py
 ```
 
-| Gate | What it checks |
-|---|---|
-| `tools/build.py --check` | The STAC JSON matches what the build measures |
-| `test_links.py` | Every relative link and asset href resolves |
-| `test_publish.py` | Nothing outside `catalog/` can be uploaded |
-| `test_upload_data.py` | Only staged files with an allowed suffix upload |
-| `test_stac_valid.py` | Valid STAC 1.1.0, via `stac-check` |
-| `test_conformance.py` | Portolan conformance, via `rashid` |
-| `test_agent_claims.py` | Every claim in each published `AGENTS.md`, against the COGs and the sources |
-| `test_agent_claims_mutation.py` | The claims gate fails when any number in a guide changes |
+`tests/run_all.py` also runs the template gates for links, the publish
+boundary, STAC validity, and Portolan conformance through `rashid`. Each week,
+the [live claims](.github/workflows/live-claims.yml) workflow repeats the
+claims gate against the published objects.
 
-CI runs all of them on each pull request. The weekly
-[Live claims](.github/workflows/live-claims.yml) workflow runs the claims gate
-against the published objects and compares their bytes with the STAC JSON.
+## Publishing
 
-## Publish
-
-The catalog publishes to the `portolan-mirrors` account on Source
-Cooperative. `catalog.publish.yaml` names the `source-coop-proxy` AWS profile,
-which reads temporary credentials from the
+`catalog.publish.yaml` sends the catalog to the `portolan-mirrors` account on
+Source Cooperative through the `source-coop-proxy` AWS profile. That profile
+reads temporary credentials from the
 [source-coop CLI](https://github.com/source-cooperative/source-coop-cli).
 
 ```bash
@@ -65,10 +79,11 @@ python3 tools/upload_data.py --confirm
 python3 tools/publish.py --confirm
 ```
 
-Both scripts run as a dry run without `--confirm`. Neither deletes an object.
+Without `--confirm`, both scripts print what they would upload. Neither
+script deletes an object.
 
 ## License
 
-Apache-2.0 covers the tooling in this repository. The data is
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), from the World Bank
-and CSIRO.
+Apache-2.0 covers the code in this repository. The data is
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Attribute the World
+Bank and CSIRO when you reuse it.

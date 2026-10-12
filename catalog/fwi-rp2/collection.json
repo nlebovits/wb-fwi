@@ -9,8 +9,8 @@
     "https://stac-extensions.github.io/render/v2.0.0/schema.json"
   ],
   "id": "fwi-rp2",
-  "title": "Wildfire Hazard: FWI, 2-Year Return Period",
-  "description": "The yearly maximum 12 noon Fire Weather Index (FWI) expected once in 2 years, on a global 0.5° grid. Higher values mean weather that favors severe fire.\n\n[CSIRO](https://www.csiro.au/) computed the grid for the [ThinkHazard!](https://thinkhazard.org/) wildfire layer from the daily FWI in NASA's [Global Fire Weather Database](https://data.giss.nasa.gov/impacts/gfwed/), 1981 to 2016. The [technical basis](https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095597/THhazardclass_Wildfire_CSIRO.pdf) gives the method and the thresholds that ThinkHazard! uses. Sibling collections hold the 10 and 30-year return periods.\n\nThis collection mirrors the [World Bank Data Catalog dataset](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard) as a cloud-optimized GeoTIFF. Cells that GFWED masks, such as oceans and deserts, hold 0. Read [AGENTS.md](AGENTS.md) for the grid, the quirks, and recipes that run.",
+  "title": "Wildfire hazard: FWI, 2-year return period",
+  "description": "The yearly maximum Fire Weather Index (FWI) at noon local time, expected once in 2 years, on a global 0.5° grid. Higher values mean weather that favors severe fire.\n\n[CSIRO](https://www.csiro.au/) computed the grid for the [ThinkHazard!](https://thinkhazard.org/) wildfire layer from the daily FWI in NASA's [Global Fire Weather Database](https://data.giss.nasa.gov/impacts/gfwed/), 1981 to 2016. The [technical basis](https://datacatalogfiles.worldbank.org/ddh-published/0066912/DR0095597/THhazardclass_Wildfire_CSIRO.pdf) gives the method and the thresholds that ThinkHazard! uses. Sibling collections hold the 10 and 30-year return periods.\n\nThis collection mirrors the [World Bank Data Catalog dataset](https://datacatalog.worldbank.org/search/dataset/0066912/global-wildfire-hazard) as a cloud-optimized GeoTIFF. Cells that GFWED masks, such as oceans and deserts, hold 0. Read [AGENTS.md](AGENTS.md) for the grid, the quirks, and recipes that run.",
   "keywords": [
     "fire hazard",
     "wildfire",
@@ -136,19 +136,19 @@
       "rel": "root",
       "href": "../catalog.json",
       "type": "application/json",
-      "title": "World Bank Global Wildfire Hazard"
+      "title": "World Bank global wildfire hazard"
     },
     {
       "rel": "parent",
       "href": "../catalog.json",
       "type": "application/json",
-      "title": "World Bank Global Wildfire Hazard"
+      "title": "World Bank global wildfire hazard"
     },
     {
       "rel": "self",
       "href": "https://data.source.coop/portolan-mirrors/wb-fwi/fwi-rp2/collection.json",
       "type": "application/json",
-      "title": "Wildfire Hazard: FWI, 2-Year Return Period"
+      "title": "Wildfire hazard: FWI, 2-year return period"
     },
     {
       "rel": "via",
@@ -178,13 +178,13 @@
       "rel": "related",
       "href": "../fwi-rp10/collection.json",
       "type": "application/json",
-      "title": "Wildfire Hazard: FWI, 10-Year Return Period"
+      "title": "Wildfire hazard: FWI, 10-year return period"
     },
     {
       "rel": "related",
       "href": "../fwi-rp30/collection.json",
       "type": "application/json",
-      "title": "Wildfire Hazard: FWI, 30-Year Return Period"
+      "title": "Wildfire hazard: FWI, 30-year return period"
     }
   ],
   "assets": {
@@ -192,7 +192,7 @@
       "href": "./csiro_wf_max_fwi_rp2.tif",
       "type": "image/tiff; application=geotiff; profile=cloud-optimized",
       "title": "FWI, 2-year return period (COG)",
-      "description": "Yearly maximum 12 noon Fire Weather Index expected once in 2 years. Cloud-optimized copy of the World Bank file.",
+      "description": "Yearly maximum Fire Weather Index at noon local time, expected once in 2 years. Cloud-optimized copy of the World Bank file.",
       "roles": [
         "data"
       ],

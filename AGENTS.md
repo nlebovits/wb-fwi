@@ -6,13 +6,13 @@ global wildfire hazard dataset. The published catalog is
 
 ## The build
 
-`tools/build.py` downloads the World Bank GeoTIFFs, writes one COG per
-collection to `staging/`, and writes the measured fields into the STAC JSON.
+`tools/build.py` downloads the World Bank GeoTIFFs and converts each one to
+a COG in `staging/`. It then writes the measured fields into the STAC JSON.
 `tools/sources.json` pins each source file by SHA-256. A changed upstream
 file stops the build. Do not edit a pin to make the build pass.
 Read what changed upstream first.
 
-The build owns the measured fields. Edit every other STAC field by hand.
+The build writes the measured fields. Edit the other STAC fields by hand.
 `python3 tools/build.py --check` fails when the STAC JSON and the built files
 disagree.
 
@@ -34,24 +34,24 @@ every version of a binary forever.
 
 ## Published agent guides
 
-Every block in a `catalog/**/AGENTS.md` carries a marker that CI tests. Read
+Each block in a `catalog/**/AGENTS.md` has a marker that CI tests. Read
 the docstring of `tests/test_agent_claims.py` for the marker syntax. A
 `check` marker names a function that measures the COGs. A `quote` marker
 names a source and its exact words. A block that only instructs the reader
-carries `<!-- guidance -->`.
+has a `<!-- guidance -->` comment instead.
 
 Every number in a block must occur in a marker's quote or a check's output.
-`tests/test_agent_claims_mutation.py` changes each number in turn and fails
+`tests/test_agent_claims_mutation.py` changes each number, one at a time, and fails
 when the claims gate still passes. When you add a claim, add its check or
 quote in the same change.
 
 ## The conformance allow-list
 
-`ACCEPTED` in `tests/test_conformance.py` ships empty. Never add an entry
+`ACCEPTED` in `tests/test_conformance.py` is empty. Never add an entry
 without a matching row in `docs/conformance.md` giving the rule, where it
 fires, why it is accepted, and the issue tracking its removal.
 
 ## The links back to this repository
 
-`catalog/catalog.json` carries a `vcs` link and an `issues` link. Keep both
+`catalog/catalog.json` has a `vcs` link and an `issues` link. Keep both
 hrefs absolute, because a relative href resolves against the public base URL.

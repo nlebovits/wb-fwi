@@ -66,6 +66,8 @@ RETURN_PERIODS = tuple(sorted(e["return_period"] for e in SOURCES["files"]))
 
 MARKER = re.compile(r"<!--\s*(check|quote):\s*(.*?)\s*-->", re.S)
 GUIDANCE = re.compile(r"<!--\s*guidance\s*-->")
+# Vale control comments, such as <!-- vale Google.Exclamation = NO -->.
+VALE = re.compile(r"<!--\s*vale\b[^>]*-->")
 FENCE = re.compile(r"^```(\w*)\n(.*?)^```\s*$", re.M | re.S)
 NUMBER = re.compile(r"-?\d+(?:\.\d+)?")
 NUMBER_WORDS = {1: "one", 2: "two", 3: "three", 4: "four"}
@@ -161,8 +163,8 @@ def check_catalog_root(rp: int | None) -> list[str]:
         assets = [a for a in collection(p)["assets"].values() if "data" in a["roles"]]
         assert len(assets) == 1, f"{collection_id(p)} has {len(assets)} data assets"
     return [f"`{self_href}`",
-            f"It holds {NUMBER_WORDS[len(children)]} collections, one per return period",
-            "Each collection holds one single-band COG"]
+            f"It contains {NUMBER_WORDS[len(children)]} collections, one per return period",
+            "Each collection contains one single-band COG"]
 
 
 def check_collection_table(rp: int | None) -> list[str]:
@@ -229,7 +231,7 @@ def check_nonzero_quantiles(rp: int | None) -> list[str]:
     values = values[values > 0].astype("float64")
     median, p99 = np.percentile(values, [50, 99])
     return [f"{values.size} cells hold a value above 0",
-            f"Their median is {median:.2f}", f"their 99th percentile is {p99:.2f}"]
+            f"Their median is {median:.2f}", f"their ninety-ninth percentile is {p99:.2f}"]
 
 
 def check_cap_one(rp: int | None) -> list[str]:
@@ -311,7 +313,7 @@ def check_self_links(rp: int | None) -> list[str]:
     for p in RETURN_PERIODS:
         assert not any(l["rel"] == "item" for l in collection(p)["links"])
     return ["carry a `self` link to their published URL",
-            "collection-level asset, with no items"]
+            "stores its COG as a collection-level asset, with no items"]
 
 
 # Table 3 of the technical basis, PDF page 17. check_hazard_table proves each
@@ -434,7 +436,7 @@ def expected_heading(rp: int | None) -> str:
         title = json.loads((CATALOG / "catalog.json").read_text())["title"]
     else:
         title = collection(rp)["title"]
-    return f"# AGENTS.md: {title}"
+    return f"# {title}"
 
 
 def check_guide(path: Path, used: set[str], rp: int | None = None) -> list[str]:
@@ -445,7 +447,8 @@ def check_guide(path: Path, used: set[str], rp: int | None = None) -> list[str]:
         errors.append(f"{rel}:1: the heading is {first!r}, "
                       f"the STAC title gives {expected_heading(rp)!r}")
     for line, block in blocks(path.read_text()):
-        if all(row.startswith("#") for row in block.split("\n")):
+        block = VALE.sub("", block).strip()
+        if not block or all(row.startswith("#") for row in block.split("\n")):
             continue
         markers = MARKER.findall(block)
         body = normalize(GUIDANCE.sub("", MARKER.sub("", block)))

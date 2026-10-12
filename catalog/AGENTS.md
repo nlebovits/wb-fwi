@@ -1,16 +1,18 @@
-# AGENTS.md: World Bank Global Wildfire Hazard
+# World Bank global wildfire hazard
+<!-- vale Google.Exclamation = NO -->
+<!-- vale Microsoft.Negative = NO -->
 
-Read this before you query the catalog. Every fact here is quoted from a
-source or measured from the published COGs. The HTML comment beside each fact
-names the CI check that tests it, in
+Read this before you query the catalog. The facts here come from a source
+or from the published COGs. The HTML comment beside each fact identifies the
+CI check that tests it, in
 [tests/test_agent_claims.py](https://github.com/nlebovits/wb-fwi/blob/main/tests/test_agent_claims.py).
 <!-- guidance -->
 
-## What this catalog holds
+## Contents
 
 The catalog root is `https://data.source.coop/portolan-mirrors/wb-fwi/catalog.json`.
-It holds three collections, one per return period. Each collection holds one
-single-band COG. <!-- check: catalog_root -->
+It contains three collections, one per return period. Each collection
+contains one single-band COG. <!-- check: catalog_root -->
 
 | Collection | File | Return period |
 |---|---|---|
@@ -23,12 +25,13 @@ The URL pattern is
 `https://data.source.coop/portolan-mirrors/wb-fwi/<collection>/<file>`.
 <!-- check: url_pattern -->
 
-Each cell holds the yearly maximum 12 noon Fire Weather Index (FWI) that is
+Each cell stores the yearly maximum Fire Weather Index (FWI) at noon local time that is
 expected once in the return period.
 <!-- quote: pdf | 13 | Modelled yearly maximum 12 noon FWI for return period intervals of 2, 10 and 30 years -->
+<!-- quote: pdf | 10 | daily FWI calculations for 12 noon local time -->
 
 CSIRO fit a GEV distribution to the annual maxima of daily FWI from GFWED,
-from January 1st 1981 to December 31st 2016.
+from January 1, 1981 to December 31, 2016.
 <!-- quote: pdf | 10 | January 1st 1981 to December 31st 2016 -->
 <!-- quote: pdf | 11 | The annual extreme of FWI, denoted by x, is assumed to follow the GEV distribution -->
 
@@ -44,16 +47,16 @@ in the others. Read them as three layers of one array.
 
 ## Quirks that produce wrong answers
 
-**Zero means masked or no fire weather.** GFWED masks significant water bodies
-and arid regions with no vegetation. Those cells hold 0, and the files declare
+**Zero means masked or no fire weather.** GFWED masks large water bodies and
+arid regions with no vegetation. Those cells hold 0, and the files declare
 no other marker for them. <!-- quote: pdf | 10 | Data were masked (by the GFWED) for significant water bodies and arid regions with no -->
 Zero marks masked cells in the mid-Pacific, the central Sahara, and central
 Greenland. Exclude zeros before you average, or the ocean pulls every mean
 toward 0. <!-- check: masked_zero -->
 
 **Coastal cells are often masked.** A 0.5° cell that is mostly sea holds 0.
-Two Sydney sample points return 0 in all three files: 151.2°E 33.9°S and
-150.7°E 33.75°S. The point 150.3°E 33.7°S, further inland, returns 47.27,
+The Sydney sample points 151.2°E 33.9°S and 150.7°E 33.75°S
+return 0 in all three files. The point 150.3°E 33.7°S, further inland, returns 47.27,
 60.07, and 64.76. <!-- check: sydney_cells -->
 Sample a land cell nearby, or aggregate over an area, before you report 0 for
 a coastal place.
@@ -147,7 +150,7 @@ than cells near the equator, so do not read the counts as land area.
 
 ## Structure
 
-Each collection holds its COG as a collection-level asset, with no items.
+Each collection stores its COG as a collection-level asset, with no items.
 Assets and structural links resolve relative to the object that carries
 them. The catalog and each collection carry a `self` link to their
 published URL. <!-- check: self_links -->
